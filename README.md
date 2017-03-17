@@ -6,7 +6,7 @@ Send push notifications to [Mutter](https://www.mutterirc.com/) from
 ZNC as my Bouncer, so I can't use the
 [Mutter ZNC Module](https://bitbucket.org/jmclough/mutter-push/overview)).
 
-##To use
+## To use
 Get your apple push token for mutter. I may eventually automate this,
 but since Weechat's relay doesn't seem to have an easy way of adding
 server CAPs, it can't be automated in the way that it is for the ZNC
@@ -19,7 +19,7 @@ to connect to it, and tell it you support the ```mutterirc.com/push``` CAP.
     CAP LS
     NICK echalie
     USER echarlie * * :Mutter User
-    :weechat.relay.irc CAP nick LS :mutterirc.com/push
+    :fake.irc.server CAP nick LS :mutterirc.com/push
 
     CAP REQ mutterirc.com/push
     :fake.irc.server CAP echarlie ACK :mutterirc.com/push                                                         
@@ -28,29 +28,30 @@ to connect to it, and tell it you support the ```mutterirc.com/push``` CAP.
     
     MUTTER BEGIN 67FA492439FCB92C2A55555927208206CF19076447777777FD8BE9F5326C94ED
     MUTTER VERSION 67FA492439FCB92C2A55555E27208206CF19076447777777FD8BE9F5326C94ED 1.0
-    MUTTER KEYWORD 67FA492439FCB92C2A55555E27208206CF19076447777777FD8BE9F5326C94ED :echalie
+    MUTTER KEYWORD 67FA492439FCB92C2A55555E27208206CF19076447777777FD8BE9F5326C94ED :echarlie
     MUTTER END 67FA492439FCB92C2A55555E27208206CF19076447777777FD8BE9F5326C94ED
 
 That long numeric string is the token. Set it as ```MUTTER_TOKEN = ''``` in
-the script.
+the script, and copy ```weemutter.py``` into ```~/.weechat/python/```. Run 
+```/script load weemutter.py``` from within weechat.
 
-##Config Options
+## Config Options
 
 - ```MUTTER_TOKEN = ''``` Yeah. this is important.
 - ```ONLY_AWAY = True``` Only send notifications if away
 - ```LIMIT_RATE_TO = 20``` Don't send more than one notification in 20 seconds
 
-##Features
+## Features
 
 - It sends push notifications
 - Rate limiting, to not annoy blipz.
 
-##Bugs
+## Bugs
 
 - No in-Weechat configuration
 - No easy way to get tokens
 - Formatting of push notification is ugly
 - Globals, because I'm lazy and passing variables is hard.
 - Can't disable notifications for channels.
-- No error handling for failure of pushes (And I haven't stripped out the ZNC module's code)
+- No error handling for failure of pushes (And I haven't stripped out the ZNC module's own error-handling code)
 - No debug mode
