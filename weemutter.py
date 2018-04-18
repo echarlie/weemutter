@@ -18,6 +18,7 @@ SCRIPT_DESC = 'Send push notifs to mutter for iOS'
 ONLY_AWAY = True  ##only send notifications if away
 LIMIT_RATE_TO = 20 ## rate limit, in seconds
 RATE_LIMITED = False ##awful global; don't touch!!!
+PRIVATE_MESSAGE_CONTENT = False ## Set to True to only send nick, not message
 
 script_options = {
         'api_key' : '',
@@ -43,7 +44,7 @@ def send_notif(body):
     session.headers['User-Agent'] = MUTTER_USER_AGENT
     alert = { 'title' : title, 'body' : body }
     payload = { 'version' : version, 'token' : token, 'alert' : alert }
-    response = session.post(MUTTER_SERVER_URL, verify=False, data=json.dumps(payload), headers={"content-type": "text/javascript"})
+    response = session.post(MUTTER_SERVER_URL, verify=True, data=json.dumps(payload), headers={"content-type": "text/javascript"})
     data = response.json()
     if 'error' in data and 'code' in data['error']:
         if data['error']['code'] == "200":
@@ -64,6 +65,8 @@ def print_cb(data, buf, date, tags, displayed, highlight, prefix, message):
     if RATE_LIMITED == True:
         #weechat.prnt("", "I've been rate limited")
         return weechat.WEECHAT_RC_OK
+    if PRIVATE_MESSAGE_CONTENT:
+        message = "Message privacy option is enabled."
     bufname = weechat.buffer_get_string(buf, "short_name")
     msg = "[%s] <%s> %s" % (bufname, prefix, message)
     send_notif(msg)
