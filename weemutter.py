@@ -2,6 +2,8 @@ import json
 import weechat
 import requests
 
+##### Mutter Push Variables #####
+
 #MUTTER_PUSH_IRCV3_CAPABILITY = "mutterirc.com/push"
 MUTTER_SERVER_URL = "https://api.mutterirc.com:8100"
 MUTTER_STATE_FILE = "mutter.json"
@@ -9,16 +11,24 @@ MUTTER_USER_AGENT = "weemutter"
 MUTTER_VERSION = '1.0'
 MUTTER_TOKEN = ''
 
+##### weechat script variables #####
+
 SCRIPT_NAME = 'weemutter'
 SCRIPT_AUTHOR = 'echarlie'
-SCRIPT_VERSION = '0.0'
+SCRIPT_VERSION = '0.0.0'
 SCRIPT_LICENSE = 'ISC'
 SCRIPT_DESC = 'Send push notifs to mutter for iOS'
 
+##### User-config Options #####
+
 ONLY_AWAY = True  ##only send notifications if away
 LIMIT_RATE_TO = 20 ## rate limit, in seconds
+PRIVATE_MESSAGE_CONTENT = False ## Set to True to only send nick and channel, not message
+
+##### Internal Global Variables #####
+
 RATE_LIMITED = False ##awful global; don't touch!!!
-PRIVATE_MESSAGE_CONTENT = False ## Set to True to only send nick, not message
+
 
 script_options = {
         'api_key' : '',
@@ -49,7 +59,8 @@ def send_notif(body):
     if 'error' in data and 'code' in data['error']:
         if data['error']['code'] == "200":
              expired_token = data['error']['token']
-             self.remove_token_from_networks(expired_token)
+             weechat.prnt("", "Token {} is expired".format(expired_token))
+             weechat.prnt("", "Please grab a new token")
 
 def weemutter_cb(data, buf, args):
     #weechat.prnt("",args)
@@ -60,9 +71,9 @@ def weemutter_cb(data, buf, args):
 def print_cb(data, buf, date, tags, displayed, highlight, prefix, message):
     if highlight != 1 and weechat.buffer_get_string( buf, "localvar_type") != "private":
         return weechat.WEECHAT_RC_OK
-    if ONLY_AWAY == True and len(weechat.buffer_get_string(buf, "localvar_away")) == 0:
+    if ONLY_AWAY and len(weechat.buffer_get_string(buf, "localvar_away")) == 0:
         return weechat.WEECHAT_RC_OK
-    if RATE_LIMITED == True:
+    if RATE_LIMITED:
         #weechat.prnt("", "I've been rate limited")
         return weechat.WEECHAT_RC_OK
     if PRIVATE_MESSAGE_CONTENT:

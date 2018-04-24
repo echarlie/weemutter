@@ -7,6 +7,7 @@ ZNC as my Bouncer, so I can't use the
 [Mutter ZNC Module](https://bitbucket.org/jmclough/mutter-push/overview)).
 
 ## To use
+
 Get your apple push token for mutter. I may eventually automate this,
 but since Weechat's relay doesn't seem to have an easy way of adding
 server CAPs, it can't be automated in the way that it is for the ZNC
@@ -37,9 +38,13 @@ the script, and copy ```weemutter.py``` into ```~/.weechat/python/```. Run
 
 ## Config Options
 
+Below are Config options in the script, with their default values. Change by
+editing the source.
+
 - ```MUTTER_TOKEN = ''``` Yeah. this is important.
-- ```ONLY_AWAY = True``` Only send notifications if away
-- ```LIMIT_RATE_TO = 20``` Don't send more than one notification in 20 seconds
+- ```ONLY_AWAY = True``` Only send notifications if away.
+- ```LIMIT_RATE_TO = 20``` Don't send more than one notification in 20 seconds.
+- ```PRIVATE_MESSAGE_CONTENT = False``` Set to True to only send nick and channel, not message.
 
 ## Features
 
@@ -53,5 +58,5 @@ the script, and copy ```weemutter.py``` into ```~/.weechat/python/```. Run
 - Formatting of push notification is ugly
 - Globals, because I'm lazy and passing variables is hard.
 - Can't disable notifications for channels.
-- No error handling for failure of pushes (And I haven't stripped out the ZNC module's own error-handling code)
-- No debug mode
+- Minimal error handling for failure of pushes.
+- No debug mode.
