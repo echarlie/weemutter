@@ -1,6 +1,8 @@
 WeeMutter
 =========
 
+**WARNING**: This project is deprecated, as Mutter has been EOLed.
+
 Send push notifications to [Mutter](https://www.mutterirc.com/) from
 [Weechat](https://weechat.org/). (This is because I don't use
 ZNC as my Bouncer, so I can't use the
